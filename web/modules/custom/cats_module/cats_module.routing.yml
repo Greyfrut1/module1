@@ -1,0 +1,7 @@
+cats_module.page:
+  path: '/greyfrut/cats'
+  defaults:
+    _controller: '\Drupal\cats_module\Controller\CatsController::content'
+    _title: 'Cats'
+  requirements:
+    _permission: 'access content'
