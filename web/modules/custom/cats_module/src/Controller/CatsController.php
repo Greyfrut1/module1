@@ -11,8 +11,15 @@ class CatsController extends ControllerBase {
    * @return array
    */
   public function content() {
-    return [
-      '#markup' => $this->t('Hello! You can add here a photo of your cat.'),
+    $output = [
+      'cats_list' => [
+        '#markup' => $this->t('Hello! You can add here a photo of your cat.'), // Текст, який ви виводили раніше.
+      ],
+      'cats_form' => [
+        '#type' => 'container',
+        'form' => $this->formBuilder()->getForm('Drupal\cats_module\Form\CatsForm'),
+      ],
     ];
+    return $output;
   }
 }
