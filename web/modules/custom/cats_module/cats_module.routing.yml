@@ -1,7 +1,15 @@
-cats_module.page:
-  path: '/greyfrut/cats'
+cats_module.admin_structure:
+  path: "/admin/structure/cats_module"
   defaults:
-    _controller: '\Drupal\cats_module\Controller\CatsController::content'
-    _title: 'Cats'
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: "Cats"
   requirements:
-    _permission: 'access content'
+    _permission: "administer site configuration"
+
+cats_module.custom_form:
+  path: "/greyfrut/cats"
+  defaults:
+    _form: '\Drupal\cats_module\Form\CatsForm'
+    _title: "Your Custom Form"
+  requirements:
+    _permission: "access content"

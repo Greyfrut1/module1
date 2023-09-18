@@ -1,0 +1,9 @@
+cats_module.admin_structure:
+  title: "Cat entity"
+  route_name: cats_module.admin_structure
+  parent: system.admin_structure
+
+cats_module.collection:
+  title: "Cats list"
+  route_name: entity.cats_module.collection
+  parent: cats_module.admin_structure

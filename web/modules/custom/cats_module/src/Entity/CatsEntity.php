@@ -19,6 +19,12 @@ use Drupal\Core\Entity\ContentEntityInterface;
  * @ContentEntityType(
  *   id = "cats_module",
  *   label = @Translation("cats_module"),
+ *    handlers = {
+ *      "list_builder" = "Drupal\cats_module\CatsEntityListBuilder",
+ *      "route_provider" = {
+ *        "html" = "Drupal\Core\Entity\Routing\DefaultHtmlRouteProvider",
+ *      },
+ *    },
  *   base_table = "cats_module",
  *   entity_keys = {
  *     "id" = "id",
