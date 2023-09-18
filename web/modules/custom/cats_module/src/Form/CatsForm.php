@@ -4,6 +4,7 @@ namespace Drupal\cats_module\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Datetime\DrupalDateTime;
 
 
 class CatsForm extends FormBase {
@@ -50,7 +51,7 @@ class CatsForm extends FormBase {
   '#type' => 'managed_file',
   '#title' => $this->t('Image'),
   '#description' => $this->t('Choose an image file to upload (jpeg, jpg, png formats only).'),
-  '#upload_location' => 'public://public/', 
+  '#upload_location' => 'public://', 
   '#upload_validators' => [
     'file_validate_extensions' => ['jpg jpeg png'], 
     'file_validate_size' => [2100000], 
@@ -90,13 +91,42 @@ class CatsForm extends FormBase {
 
     // Очистіть поле для імені кота.
     $form_state->setValue('cat_name', '');
+    
+    $name = $form_state->getValue('cat_name');
 
     // Поверніть змінену форму (порожню), щоб оновити її через AJAX.
     return $form;
   }
 
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    // Отримайте значення з поля для імені кота.
+    
+      // Отримайте значення полів з форми.
+  $cat_name = $form_state->getValue('cat_name');
+  $email = $form_state->getValue('email');
+  $image_id = $form_state->getValue('image')[0];
+
+  // Створіть нову сутність "CatsEntity".
+  $entity = \Drupal\cats_module\Entity\CatsEntity::create();
+  
+  // Встановіть значення полів сутності.
+  $entity->set('cat_name', $cat_name);
+  $entity->set('email', $email);
+  $entity->set('image', $image_id);
+  
+  // Отримайте поточний час.
+  $current_time = new DrupalDateTime('now');
+  
+  // Встановіть значення поля "created" на поточний час.
+  $entity->set('created', $current_time->getTimestamp());
+
+  // Збережіть сутність.
+  $entity->save();
+
+  // Надішліть повідомлення користувачу.
+  
+
+  // Очистіть поле для імені кота.
+  $form_state->setValue('cat_name', '');
 
   }
 
