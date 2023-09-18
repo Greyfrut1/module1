@@ -28,7 +28,7 @@ class CatsForm extends FormBase {
     ];
     $form['email'] = [
       '#type' => 'email',
-      '#title' => $this->t('Email'),
+      '#title' => $this->t('Your email:'),
       '#required' => TRUE,
       '#description' => 'Email can only contain Latin letters, underscore, or hyphen.',
       '#attributes' => [
