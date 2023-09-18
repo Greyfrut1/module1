@@ -39,19 +39,30 @@ class CatsForm extends FormBase {
         'wrapper' => 'cats-form-wrapper',
         'method' => 'replace',
         'event' => 'change',
-        //'progress' => ['type' => 'throbber', 'message' => 'test'], // Опціональний прогрес-індикатор.
+       
       ],
     ];
     $form['email_validate_message'] = [
       '#markup' => '<div class="email-validate-message"></div>',
     ];
 
+    $form['image'] = [
+  '#type' => 'managed_file',
+  '#title' => $this->t('Image'),
+  '#description' => $this->t('Choose an image file to upload (jpeg, jpg, png formats only).'),
+  '#upload_location' => 'public://public/', 
+  '#upload_validators' => [
+    'file_validate_extensions' => ['jpg jpeg png'], 
+    'file_validate_size' => [2100000], 
+  ],
+];
+
     $form['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Add cat'),
       '#ajax' => [
         'callback' => '::submitFormAjax',
-        'wrapper' => 'cats-form-wrapper', // ID обгортки, яку ми оновлюємо AJAX.
+        'wrapper' => 'cats-form-wrapper',
       ],
     ];
 
