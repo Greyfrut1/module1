@@ -1,0 +1,34 @@
+{#
+  /**
+   * @file
+   * Template for the CatsEntityListBuilder.
+   *
+   * Available variables:
+   * - rows: The list of entity rows.
+   * - header: The list of table headers.
+   * - attributes: HTML attributes for the table.
+   *
+   * @ingroup themeable
+   */
+  #}
+
+  <table{{ attributes }}>
+    <thead class="test">
+    <tr>
+      <th>{{ 'Cat name'|t }}</th>
+      <th>{{ 'Email'|t }}</th>
+      <th>{{ 'Image'|t }}</th>
+      <th>{{ 'Created'|t }}</th>
+    </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+        <tr>
+          <td>{{ row.cat_name|t }}</td>
+          <td>{{ row.email }}</td>
+          <td>{{ row.image }}</td>
+          <td>{{ row.created }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>

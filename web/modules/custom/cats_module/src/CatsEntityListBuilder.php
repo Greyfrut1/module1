@@ -12,12 +12,37 @@ use Drupal\file\Entity\File;
 use Drupal\Core\Datetime\DrupalDateTime;
 
 class CatsEntityListBuilder extends EntityListBuilder {
+
+  // public function render() {
+  //   $build = parent::render();
+
+  //   // Встановлюємо кастомний шаблон для списку.
+  //   $build['table']['#theme'] = 'cats_module_list';
+
+  //   // Решта вашого коду.
+
+  //   return $build;
+  // }
+
   public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
     return parent::createInstance($container, $entity_type);
   }
 
   public function render() {
-    $build['table'] = parent::render();
+    $entities = $this->load();
+
+    // Створюємо масив для рядків таблиці.
+    $rows = [];
+    foreach ($entities as $entity) {
+      $rows[] = $this->buildRow($entity);
+    }
+
+    $build['table'] = [
+      '#theme' => 'cats_entity_list_builder',
+      '#header' => $this->buildHeader(),
+      '#rows' => $rows,
+      '#attributes' => [],
+    ];
 
     $total = $this->getStorage()
       ->getQuery()
@@ -40,7 +65,7 @@ class CatsEntityListBuilder extends EntityListBuilder {
   public function buildRow(EntityInterface $entity) {
     $image_id = $entity->get('image')->target_id;
     $cat_name = $entity->get('cat_name')->value;
-  
+
     $image_url = '';
     if ($image_id) {
       $file = File::load($image_id);
@@ -51,17 +76,26 @@ class CatsEntityListBuilder extends EntityListBuilder {
 
     $created_timestamp = $entity->get('created')->value;
     $created_date = DrupalDateTime::createFromTimestamp($created_timestamp);
-    $created_date_formatted = $created_date->format('Y-m-d H:i:s');
-  
+    $created_date_formatted = $created_date->format('d-m-Y H:i:s');
+
     $row['cat_name'] = $entity->get('cat_name')->value;
     $row['email'] = $entity->get('email')->value;
     $row['image'] = [
       'data' => [
-        '#markup' => '<img src="' . $image_url . '" alt="' . $cat_name . '">',
+        '#markup' => '<a href="'. $image_url .'" target="_blank"><img src="' . $image_url . '" alt="' . $cat_name . '"></a>',
       ],
     ];
     $row['created'] = $created_date_formatted;
-  
+
     return $row + parent::buildRow($entity);
+  }
+  public function load() {
+    $query = $this->getStorage()->getQuery();
+    $query->sort('created', 'DESC'); // Сортування за полем "created" у зворотньому порядку (новіші зверху).
+    $query->accessCheck(FALSE);
+    $entity_ids = $query->execute();
+
+
+    return $this->storage->loadMultiple($entity_ids);
   }
 }

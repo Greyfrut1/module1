@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * Implements hook_theme() to provide a theme for CatsEntityListBuilder.
+ */
+function cats_module_theme($existing, $type, $theme, $path) {
+  return [
+    'cats_entity_list_builder' => [
+      'variables' => [
+        'rows' => [],
+        'header' => [],
+        'attributes' => [],
+      ],
+      'template' => 'CatsEntityListBuilder',
+    ],
+  ];
+}
