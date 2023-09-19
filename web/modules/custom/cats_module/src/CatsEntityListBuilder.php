@@ -86,6 +86,19 @@ class CatsEntityListBuilder extends EntityListBuilder {
       ],
     ];
     $row['created'] = $created_date_formatted;
+    $row['operations']['data'] = [
+      '#type' => 'operations',
+      '#links' => [
+        'edit' => [
+          'title' => $this->t('Edit'),
+          'url' => Url::fromRoute('entity.cats_module.edit_form', ['cats_module' => $entity->id()]),
+        ],
+        'delete' => [
+          'title' => $this->t('Delete'),
+          'url' => Url::fromRoute('entity.cats_module.delete_form', ['cats_module' => $entity->id()]),
+        ],
+      ],
+    ];
 
     return $row + parent::buildRow($entity);
   }

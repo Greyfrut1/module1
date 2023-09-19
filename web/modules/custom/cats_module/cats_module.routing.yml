@@ -13,3 +13,20 @@ cats_module.custom_form:
     _title: "Your Custom Form"
   requirements:
     _permission: "access content"
+
+entity.cats_module.edit_form:
+  path: '/admin/cats_module/{cats_module_id}/edit'
+  defaults:
+    _controller: '\Drupal\cats_module\Controller\CatsEntityEditController::edit'
+    _title: 'Edit Cats Entity'
+  requirements:
+    _permission: 'administer site configuration'
+
+entity.cats_module.delete_form:
+  path: '/admin/cats_module/{cats_module_id}/delete'
+  defaults:
+    _controller: '\Drupal\cats_module\Controller\CatsEntityDeleteController::delete'
+    _title: 'Delete Cats Entity'
+  requirements:
+    _permission: 'administer site configuration'
+
