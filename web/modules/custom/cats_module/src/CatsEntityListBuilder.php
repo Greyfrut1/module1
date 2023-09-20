@@ -34,7 +34,9 @@ class CatsEntityListBuilder extends EntityListBuilder {
     // Створюємо масив для рядків таблиці.
     $rows = [];
     foreach ($entities as $entity) {
-      $rows[] = $this->buildRow($entity);
+      if($entity){
+        $rows[] = $this->buildRow($entity);
+      }
     }
 
     $build['table'] = [
@@ -51,6 +53,8 @@ class CatsEntityListBuilder extends EntityListBuilder {
       ->execute();
 
     $build['summary']['#markup'] = $this->t('Total custom entities: @total', ['@total' => $total]);
+    $build['#attached']['library'][] = 'cats_module/cats_module_js';
+
     return $build;
   }
 
@@ -70,7 +74,7 @@ class CatsEntityListBuilder extends EntityListBuilder {
     if ($image_id) {
       $file = File::load($image_id);
       if ($file) {
-        $image_url = $file->createFileUrl();
+        $image_url = $file->createFileUrl(['style_name' => 'thumbnail']);
       }
     }
 
@@ -86,19 +90,23 @@ class CatsEntityListBuilder extends EntityListBuilder {
       ],
     ];
     $row['created'] = $created_date_formatted;
-    $row['operations']['data'] = [
-      '#type' => 'operations',
-      '#links' => [
-        'edit' => [
-          'title' => $this->t('Edit'),
-          'url' => Url::fromRoute('entity.cats_module.edit_form', ['cats_module' => $entity->id()]),
-        ],
-        'delete' => [
-          'title' => $this->t('Delete'),
-          'url' => Url::fromRoute('entity.cats_module.delete_form', ['cats_module' => $entity->id()]),
-        ],
-      ],
-    ];
+    $row['id'] = $entity->id();
+    $row['operations']['edit'] = Url::fromRoute('entity.cats_module.edit_form', ['cats_module_id' => $entity->id()]);
+    $row['operations']['delete'] = Url::fromRoute('entity.cats_module.delete_form', ['cats_module_id' => $entity->id()]);
+
+//    $row['operations']['data'] = [
+//      '#type' => 'operations',
+//      '#links' => [
+//        'edit' => [
+//          'title' => $this->t('Edit'),
+//          'url' => Url::fromRoute('entity.cats_module.edit_form', ['cats_module_id' => $entity->id()]),
+//        ],
+//        'delete' => [
+//          'title' => $this->t('Delete'),
+//          'url' => Url::fromRoute('entity.cats_module.delete_form', ['cats_module_id' => $entity->id()]),
+//        ],
+//      ],
+//    ];
 
     return $row + parent::buildRow($entity);
   }

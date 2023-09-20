@@ -11,7 +11,7 @@
    * @ingroup themeable
    */
   #}
-
+{{ attach_library('core/drupal.dialog.ajax') }}
   <table{{ attributes }}>
     <thead class="test">
     <tr>
@@ -25,11 +25,13 @@
     <tbody>
       {% for row in rows %}
         <tr>
-          <td>{{ row.cat_name|t }}</td>
+          <td>{{ row.cat_name }}</td>
           <td>{{ row.email }}</td>
           <td>{{ row.image }}</td>
           <td>{{ row.created }}</td>
-          <td>{{ row.operations }}</td>
+          <td><a href="{{ row.operations.edit }}" class="use-ajax button-edit" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800}">Edit</a>
+            <a href="{{ row.operations.delete }}" class="use-ajax button-delete delete-button-class" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800}">Delete</a>
+          </td>
         </tr>
       {% endfor %}
     </tbody>

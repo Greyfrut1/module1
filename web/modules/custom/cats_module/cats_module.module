@@ -12,6 +12,13 @@ function cats_module_theme($existing, $type, $theme, $path) {
         'attributes' => [],
       ],
       'template' => 'CatsEntityListBuilder',
+      '#attached' => [
+        'library' => ['core/drupal.dialog.ajax'],
+      ],
     ],
   ];
+}
+function cats_module_preprocess_cats_entity_list_builder(&$variables) {
+  // Підключаємо бібліотеку до темплейту.
+  $variables['#attached']['library'][] = 'cats_module/cats_module_js';
 }

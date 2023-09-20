@@ -1,0 +1,6 @@
+cats_theme:
+  version: 1.x
+  dependencies:
+    - core/jquery
+    - core/drupal.ajax
+    - core/drupal.dialog
