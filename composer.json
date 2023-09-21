@@ -21,7 +21,12 @@
         "drupal/core-composer-scaffold": "^10.0",
         "drupal/core-project-message": "^10.0",
         "drupal/core-recommended": "^10.0",
+        "drupal/dxpr_theme": "^5.1",
+        "drupal/gin": "^3.0@RC",
+        "drupal/gin_toolbar": "^1.0@RC",
         "drupal/page_manager": "^4.0@RC",
+        "drupal/thex": "^10.0",
+        "drupal/vani": "^10.0",
         "drush/drush": "^11.4"
     },
     "conflict": {

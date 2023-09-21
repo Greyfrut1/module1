@@ -1,0 +1,27 @@
+uuid: 3960895b-87b1-4554-ac1f-a31be4ded3c9
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.account
+  module:
+    - system
+  theme:
+    - thex
+_core:
+  default_config_hash: UZPtqjL7qLT_ndQuM0WiU1jS0haUQJaOUwxGCKTZblQ
+id: thex_account_menu
+theme: thex
+region: hidden
+weight: -7
+provider: null
+plugin: 'system_menu_block:account'
+settings:
+  id: 'system_menu_block:account'
+  label: 'User account menu'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 1
+  expand_all_items: false
+visibility: {  }

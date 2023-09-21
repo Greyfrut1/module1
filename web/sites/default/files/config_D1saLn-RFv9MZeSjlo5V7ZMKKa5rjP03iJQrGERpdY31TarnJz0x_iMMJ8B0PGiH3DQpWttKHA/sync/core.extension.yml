@@ -10,6 +10,7 @@ module:
   breakpoint: 0
   cats_module: 0
   ckeditor5: 0
+  color: 0
   comment: 0
   config: 0
   contact: 0
@@ -17,6 +18,7 @@ module:
   ctools: 0
   datetime: 0
   dblog: 0
+  dxpr_theme_helper: 0
   dynamic_page_cache: 0
   editor: 0
   field: 0
@@ -50,4 +52,10 @@ module:
 theme:
   olivero: 0
   claro: 0
+  stable9: 0
+  vani: 0
+  thex: 0
+  bootstrap5: 0
+  dxpr_theme: 0
+  gin: 0
 profile: standard

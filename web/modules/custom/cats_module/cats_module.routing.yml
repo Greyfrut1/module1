@@ -6,6 +6,14 @@ cats_module.admin_structure:
   requirements:
     _permission: "administer site configuration"
 
+cats_module.entities:
+  path: "/cats_list"
+  defaults:
+    _controller: '\Drupal\cats_module\Controller\CatsListController::buildListForUsers'
+    _title: "Cats list"
+  requirements:
+    _permission: "access content"
+
 cats_module.custom_form:
   path: "/greyfrut/cats"
   defaults:

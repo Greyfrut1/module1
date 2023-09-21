@@ -1,38 +1,43 @@
 {#
-  /**
-   * @file
-   * Template for the CatsEntityListBuilder.
-   *
-   * Available variables:
-   * - rows: The list of entity rows.
-   * - header: The list of table headers.
-   * - attributes: HTML attributes for the table.
-   *
-   * @ingroup themeable
-   */
-  #}
+/**
+ * @file
+ * Template for the CatsEntityListBuilder.
+ *
+ * Available variables:
+ * - rows: The list of entity rows.
+ * - header: The list of table headers.
+ * - attributes: HTML attributes for the table.
+ *
+ * @ingroup themeable
+ */
+#}
 {{ attach_library('core/drupal.dialog.ajax') }}
-  <table{{ attributes }}>
-    <thead class="test">
+<table{{ attributes }}>
+  <thead class="test">
+  <tr>
+    <th>{{ 'Cat name'|t }}</th>
+    <th>{{ 'Email'|t }}</th>
+    <th>{{ 'Image'|t }}</th>
+    <th>{{ 'Created'|t }}</th>
+    {% if attributes.user == 'administrator' %}
+    <th>{{ 'Operations'|t }}</th>
+    {% endif %}
+  </tr>
+  </thead>
+  <tbody>
+  {% for row in rows %}
     <tr>
-      <th>{{ 'Cat name'|t }}</th>
-      <th>{{ 'Email'|t }}</th>
-      <th>{{ 'Image'|t }}</th>
-      <th>{{ 'Created'|t }}</th>
-      <th>{{ 'Operations'|t }}</th>
+      <td>{{ row.cat_name }}</td>
+      <td>{{ row.email }}</td>
+      <td>{{ row.cat_image }}</td>
+      <td>{{ row.created }}</td>
+      {% if row.user == 'administrator' %}
+      <td><a href="{{ row.operations.edit }}">Edit</a>
+        <a href="{{ row.operations.delete }}" class="use-ajax button-delete delete-button-class"
+           data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800}">Delete</a>
+      </td>
+      {% endif %}
     </tr>
-    </thead>
-    <tbody>
-      {% for row in rows %}
-        <tr>
-          <td>{{ row.cat_name }}</td>
-          <td>{{ row.email }}</td>
-          <td>{{ row.cat_image }}</td>
-          <td>{{ row.created }}</td>
-          <td><a href="{{ row.operations.edit }}">Edit</a>
-            <a href="{{ row.operations.delete }}" class="use-ajax button-delete delete-button-class" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:800}">Delete</a>
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  {% endfor %}
+  </tbody>
+</table>

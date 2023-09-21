@@ -1,0 +1,5 @@
+services:
+  cats_module.list_builder:
+    class: Drupal\cats_module\CatsEntityListBuilder
+    tags:
+      - { name: entity.list_builder }

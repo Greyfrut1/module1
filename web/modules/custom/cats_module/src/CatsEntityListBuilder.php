@@ -24,6 +24,7 @@ class CatsEntityListBuilder extends EntityListBuilder {
   //   return $build;
   // }
 
+
   public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
     return parent::createInstance($container, $entity_type);
   }
@@ -52,9 +53,17 @@ class CatsEntityListBuilder extends EntityListBuilder {
       ->count()
       ->execute();
 
+    $current_user = \Drupal::currentUser();
+
+// Отримати список ролей, які має поточний користувач.
+    $user_roles = $current_user->getRoles();
+
+// Вибрати першу роль (найвищий пріоритет) зі списку ролей.
+    $second_role = array_values($user_roles)[1];
+
     $build['summary']['#markup'] = $this->t('Total custom entities: @total', ['@total' => $total]);
     $build['#attached']['library'][] = 'cats_module/cats_module_js';
-
+    $build['table']['#attributes']['user'] = $second_role;
     return $build;
   }
 
@@ -87,6 +96,15 @@ class CatsEntityListBuilder extends EntityListBuilder {
     $created_date = DrupalDateTime::createFromTimestamp($created_timestamp);
     $created_date_formatted = $created_date->format('d-m-Y H:i:s');
 
+    $current_user = \Drupal::currentUser();
+
+// Отримати список ролей, які має поточний користувач.
+    $user_roles = $current_user->getRoles();
+
+// Вибрати першу роль (найвищий пріоритет) зі списку ролей.
+    $second_role = array_values($user_roles)[1];
+
+    $row['user'] =$second_role;
     $row['cat_name'] = $entity->get('cat_name')->value;
     $row['email'] = $entity->get('email')->value;
     $row['image'] = [
@@ -100,19 +118,19 @@ class CatsEntityListBuilder extends EntityListBuilder {
     $row['operations']['edit'] = Url::fromRoute('entity.cats_module.edit_form', ['cats_module_id' => $entity->id()]);
     $row['operations']['delete'] = Url::fromRoute('entity.cats_module.delete_form', ['cats_module_id' => $entity->id()]);
 
-//    $row['operations']['data'] = [
-//      '#type' => 'operations',
-//      '#links' => [
-//        'edit' => [
-//          'title' => $this->t('Edit'),
-//          'url' => Url::fromRoute('entity.cats_module.edit_form', ['cats_module_id' => $entity->id()]),
-//        ],
-//        'delete' => [
-//          'title' => $this->t('Delete'),
-//          'url' => Url::fromRoute('entity.cats_module.delete_form', ['cats_module_id' => $entity->id()]),
-//        ],
-//      ],
-//    ];
+    $row['operations']['data'] = [
+      '#type' => 'operations',
+      '#links' => [
+        'edit' => [
+          'title' => $this->t('Edit'),
+          'url' => Url::fromRoute('entity.cats_module.edit_form', ['cats_module_id' => $entity->id()]),
+        ],
+        'delete' => [
+          'title' => $this->t('Delete'),
+          'url' => Url::fromRoute('entity.cats_module.delete_form', ['cats_module_id' => $entity->id()]),
+        ],
+      ],
+    ];
 
     return $row + parent::buildRow($entity);
   }
