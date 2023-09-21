@@ -74,9 +74,14 @@ class CatsEntityListBuilder extends EntityListBuilder {
     if ($image_id) {
       $file = File::load($image_id);
       if ($file) {
-        $image_url = $file->createFileUrl(['style_name' => 'thumbnail']);
+        $image_url = $file->createFileUrl();
       }
     }
+    $cat_image = [
+      '#theme' => 'image_style',
+      '#style_name' => 'thumbnail',
+      '#uri' => $file->getFileUri(),
+      ];
 
     $created_timestamp = $entity->get('created')->value;
     $created_date = DrupalDateTime::createFromTimestamp($created_timestamp);
@@ -89,6 +94,7 @@ class CatsEntityListBuilder extends EntityListBuilder {
         '#markup' => '<a href="'. $image_url .'" target="_blank"><img src="' . $image_url . '" alt="' . $cat_name . '"></a>',
       ],
     ];
+    $row['cat_image'] = $cat_image;
     $row['created'] = $created_date_formatted;
     $row['id'] = $entity->id();
     $row['operations']['edit'] = Url::fromRoute('entity.cats_module.edit_form', ['cats_module_id' => $entity->id()]);

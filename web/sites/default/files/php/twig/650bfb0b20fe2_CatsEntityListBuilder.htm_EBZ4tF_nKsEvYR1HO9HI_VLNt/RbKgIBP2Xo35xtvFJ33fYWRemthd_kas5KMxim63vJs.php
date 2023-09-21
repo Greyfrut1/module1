@@ -84,7 +84,7 @@ class __TwigTemplate_e738f5e416ec3b96b9b81964460b456c extends Template
             echo "</td>
           <td>";
             // line 30
-            echo $this->extensions['Drupal\Core\Template\TwigExtension']->escapeFilter($this->env, $this->sandbox->ensureToStringAllowed(twig_get_attribute($this->env, $this->source, $context["row"], "image", [], "any", false, false, true, 30), 30, $this->source), "html", null, true);
+            echo $this->extensions['Drupal\Core\Template\TwigExtension']->escapeFilter($this->env, $this->sandbox->ensureToStringAllowed(twig_get_attribute($this->env, $this->source, $context["row"], "cat_image", [], "any", false, false, true, 30), 30, $this->source), "html", null, true);
             echo "</td>
           <td>";
             // line 31
@@ -93,7 +93,7 @@ class __TwigTemplate_e738f5e416ec3b96b9b81964460b456c extends Template
           <td><a href=\"";
             // line 32
             echo $this->extensions['Drupal\Core\Template\TwigExtension']->escapeFilter($this->env, $this->sandbox->ensureToStringAllowed(twig_get_attribute($this->env, $this->source, twig_get_attribute($this->env, $this->source, $context["row"], "operations", [], "any", false, false, true, 32), "edit", [], "any", false, false, true, 32), 32, $this->source), "html", null, true);
-            echo "\" class=\"use-ajax button-edit\" data-dialog-type=\"modal\" data-dialog-options=\"{&quot;width&quot;:800}\">Edit</a>
+            echo "\">Edit</a>
             <a href=\"";
             // line 33
             echo $this->extensions['Drupal\Core\Template\TwigExtension']->escapeFilter($this->env, $this->sandbox->ensureToStringAllowed(twig_get_attribute($this->env, $this->source, twig_get_attribute($this->env, $this->source, $context["row"], "operations", [], "any", false, false, true, 33), "delete", [], "any", false, false, true, 33), 33, $this->source), "html", null, true);
