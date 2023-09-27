@@ -2,11 +2,10 @@
 
 namespace Drupal\cats_module\Controller;
 
-use Drupal\Core\Controller\ControllerBase;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Drupal\Core\Ajax\OpenModalDialogCommand;
 use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\OpenModalDialogCommand;
+use Drupal\Core\Controller\ControllerBase;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Provides a controller for cat entity deletion and modal display.
@@ -29,15 +28,10 @@ class CatsEntityDeleteController extends ControllerBase {
     if (!$cats_entity) {
       throw new NotFoundHttpException();
     }
-
-//    // Створюємо AjaxResponse для відправлення Ajax-запиту.
     $response = new AjaxResponse();
-//
-//    // Ваш HTML-код форми для підтвердження видалення.
     $form = \Drupal::formBuilder()->getForm('\Drupal\cats_module\Form\ConfirmDeleteForm', $cats_entity);
     $form['#attached']['library'][] = 'cats_module/cats_module_js';
 
-    // Викликаємо OpenModalDialogCommand для відображення модального вікна.
     $response->addCommand(new OpenModalDialogCommand(
       t('Delete Cat Entity'),
       $form,
@@ -46,4 +40,5 @@ class CatsEntityDeleteController extends ControllerBase {
 
     return $response;
   }
+
 }

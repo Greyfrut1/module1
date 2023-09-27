@@ -1,0 +1,38 @@
+{% macro getValue(form, variableName) %}
+  {{ attribute(form, variableName) }}
+{% endmacro %}
+
+<div>
+  <table>
+    <thead>
+    <tr>
+      <th>Select</th>
+      <th>{{ 'Cat name'|t }}</th>
+      <th>{{ 'Email'|t }}</th>
+      <th>{{ 'Image'|t }}</th>
+      <th>{{ 'Created'|t }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for row in form['#rows'] %}
+      <tr>
+        {% macro getValue(form, variableName) %}
+          {{ attribute(form, variableName) }}
+        {% endmacro %}
+        <td>{{ _self.getValue(form, row.id) }}</td>
+        <td>{{ row.cat_name }}</td>
+        <td>{{ row.email }}</td>
+        <td>{{ row.cat_image }}</td>
+        <td>{{ row.created }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {{ form.form_build_id }}
+  {{ form.form_token }}
+  {{ form.form_id }}
+  {{ form.actions }}
+  {{ form.test2 }}
+</div>
+
+

@@ -2,12 +2,16 @@
 
 namespace Drupal\cats_module\Form;
 
+use Drupal\cats_module\Entity\CatsEntity;
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Datetime\DrupalDateTime;
 
-
+/**
+ *
+ */
 class CatsForm extends FormBase {
+
   /**
    * {@inheritdoc}
    */
@@ -34,13 +38,13 @@ class CatsForm extends FormBase {
       '#description' => 'Email can only contain Latin letters, underscore, or hyphen.',
       '#attributes' => [
         'class' => ['4'],
-        ],
+      ],
       '#ajax' => [
         'callback' => '::validateEmailAjax',
         'wrapper' => 'cats-form-wrapper',
         'method' => 'replace',
         'event' => 'change',
-       
+
       ],
     ];
     $form['email_validate_message'] = [
@@ -48,15 +52,15 @@ class CatsForm extends FormBase {
     ];
 
     $form['image'] = [
-  '#type' => 'managed_file',
-  '#title' => $this->t('Image'),
-  '#description' => $this->t('Choose an image file to upload (jpeg, jpg, png formats only).'),
-  '#upload_location' => 'public://', 
-  '#upload_validators' => [
-    'file_validate_extensions' => ['jpg jpeg png'], 
-    'file_validate_size' => [2100000], 
-  ],
-];
+      '#type' => 'managed_file',
+      '#title' => $this->t('Image'),
+      '#description' => $this->t('Choose an image file to upload (jpeg, jpg, png formats only).'),
+      '#upload_location' => 'public://',
+      '#upload_validators' => [
+        'file_validate_extensions' => ['jpg jpeg png'],
+        'file_validate_size' => [2100000],
+      ],
+    ];
 
     $form['submit'] = [
       '#type' => 'submit',
@@ -66,8 +70,6 @@ class CatsForm extends FormBase {
         'wrapper' => 'cats-form-wrapper',
       ],
     ];
-
-
 
     return $form;
   }
@@ -85,48 +87,48 @@ class CatsForm extends FormBase {
     $cat_name = $form_state->getValue('cat_name');
 
     // Збережіть ім'я кота у вашому модулі або в базі даних, залежно від вашого варіанту реалізації.
-
     // Повідомте користувача про успішне додавання кота.
     \Drupal::messenger()->addMessage($this->t('The cat @name has been added.', ['@name' => $cat_name]));
 
     // Очистіть поле для імені кота.
     $form_state->setValue('cat_name', '');
-    
+
     $name = $form_state->getValue('cat_name');
 
     // Поверніть змінену форму (порожню), щоб оновити її через AJAX.
     return $form;
   }
 
+  /**
+   *
+   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    
-      // Отримайте значення полів з форми.
-  $cat_name = $form_state->getValue('cat_name');
-  $email = $form_state->getValue('email');
-  $image_id = $form_state->getValue('image')[0];
 
-  // Створіть нову сутність "CatsEntity".
-  $entity = \Drupal\cats_module\Entity\CatsEntity::create();
-  
-  // Встановіть значення полів сутності.
-  $entity->set('cat_name', $cat_name);
-  $entity->set('email', $email);
-  $entity->set('image', $image_id);
-  
-  // Отримайте поточний час.
-  $current_time = new DrupalDateTime('now');
-  
-  // Встановіть значення поля "created" на поточний час.
-  $entity->set('created', $current_time->getTimestamp());
+    // Отримайте значення полів з форми.
+    $cat_name = $form_state->getValue('cat_name');
+    $email = $form_state->getValue('email');
+    $image_id = $form_state->getValue('image')[0];
 
-  // Збережіть сутність.
-  $entity->save();
+    // Створіть нову сутність "CatsEntity".
+    $entity = CatsEntity::create();
 
-  // Надішліть повідомлення користувачу.
-  
+    // Встановіть значення полів сутності.
+    $entity->set('cat_name', $cat_name);
+    $entity->set('email', $email);
+    $entity->set('image', $image_id);
 
-  // Очистіть поле для імені кота.
-  $form_state->setValue('cat_name', '');
+    // Отримайте поточний час.
+    $current_time = new DrupalDateTime('now');
+
+    // Встановіть значення поля "created" на поточний час.
+    $entity->set('created', $current_time->getTimestamp());
+
+    // Збережіть сутність.
+    $entity->save();
+
+    // Надішліть повідомлення користувачу.
+    // Очистіть поле для імені кота.
+    $form_state->setValue('cat_name', '');
 
   }
 
@@ -141,6 +143,10 @@ class CatsForm extends FormBase {
       $form_state->setErrorByName('cat_name', $this->t('Cat name must be between 3 and 32 characters.'));
     }
   }
+
+  /**
+   *
+   */
   public function validateEmailAjax(array &$form, FormStateInterface $form_state) {
     $email = $form_state->getValue('email');
 
@@ -148,7 +154,8 @@ class CatsForm extends FormBase {
     if (!\Drupal::service('email.validator')->isValid($email)) {
       $form['email']['#attributes']['class'][] = 'error';
       $form['email_validate_message']['#markup'] = '<div class="email-valudate-message">' . $this->t('Email is not valid.') . '</div>';
-    } else{
+    }
+    else {
       $form['email']['#attributes']['class'][] = '';
       $form['email_validate_message']['#markup'] = '';
     }
@@ -156,4 +163,5 @@ class CatsForm extends FormBase {
     // Поверніть всю оновлену форму, а не лише поле електронної пошти.
     return $form;
   }
+
 }

@@ -7,30 +7,43 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-
+/**
+ *
+ */
 class CatsEntityEditForm extends FormBase {
 
   protected $entity;
 
+  /**
+   *
+   */
   public function __construct(CatsEntity $entity) {
     $this->entity = $entity;
   }
 
+  /**
+   *
+   */
   public static function create(ContainerInterface $container) {
 
     $route_parameters = \Drupal::routeMatch()->getParameters();
     $cat_id = $route_parameters->get('cats_module_id');
-
 
     $entity = \Drupal::entityTypeManager()->getStorage('cats_module')->load($cat_id);
 
     return new static($entity);
   }
 
+  /**
+   *
+   */
   public function getFormId() {
     return 'cats_module_id';
   }
 
+  /**
+   *
+   */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     $cats_entity = $this->entity;
@@ -87,10 +100,6 @@ class CatsEntityEditForm extends FormBase {
    * {@inheritdoc}
    */
 
-
-
-
-
   /**
    * {@inheritdoc}
    */
@@ -104,6 +113,10 @@ class CatsEntityEditForm extends FormBase {
 
     $form_state->setRedirect('entity.cats_module.collection');
   }
+
+  /**
+   *
+   */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     $cat_name = $form_state->getValue('cat_name');
 
@@ -112,6 +125,10 @@ class CatsEntityEditForm extends FormBase {
       $form_state->setErrorByName('cat_name', $this->t('Cat name must be between 3 and 32 characters.'));
     }
   }
+
+  /**
+   *
+   */
   public function validateEmailAjax(array &$form, FormStateInterface $form_state) {
     $email = $form_state->getValue('email');
 
@@ -119,7 +136,8 @@ class CatsEntityEditForm extends FormBase {
     if (!\Drupal::service('email.validator')->isValid($email)) {
       $form['email']['#attributes']['class'][] = 'error';
       $form['email_validate_message']['#markup'] = '<div class="email-valudate-message">' . $this->t('Email is not valid.') . '</div>';
-    } else{
+    }
+    else {
       $form['email']['#attributes']['class'][] = '';
       $form['email_validate_message']['#markup'] = '';
     }
@@ -127,4 +145,5 @@ class CatsEntityEditForm extends FormBase {
     // Поверніть всю оновлену форму, а не лише поле електронної пошти.
     return $form;
   }
+
 }

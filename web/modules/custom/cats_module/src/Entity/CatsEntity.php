@@ -3,14 +3,10 @@
 namespace Drupal\cats_module\Entity;
 
 use Drupal\Core\Entity\ContentEntityBase;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\file\Entity\File;
-use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\user\UserInterface;
-use Drupal\Core\Entity\EntityChangedTrait;
-use Drupal\Core\Render\Element\EntityAutocomplete;
-use Drupal\Core\Entity\ContentEntityInterface;
+
 /**
  * Defines the cats_module entity.
  *
@@ -37,9 +33,11 @@ use Drupal\Core\Entity\ContentEntityInterface;
  *    },
  * )
  */
-
 class CatsEntity extends ContentEntityBase implements ContentEntityInterface {
 
+  /**
+   *
+   */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
 
     // Standard field, used as unique if primary index.
@@ -65,7 +63,7 @@ class CatsEntity extends ContentEntityBase implements ContentEntityInterface {
       ->setDescription(t("Email can only contain Latin letters, underscore, or hyphen."))
       ->setDefaultValue("")
       ->setDisplayOptions("form", ["type" => "email_default", "wegith" => -3]);
-      
+
     $fields['image'] = BaseFieldDefinition::create('image')
       ->setLabel(t('Image'))
       ->setDescription(t('An image associated with the custom entity.'))
@@ -77,4 +75,5 @@ class CatsEntity extends ContentEntityBase implements ContentEntityInterface {
 
     return $fields;
   }
+
 }

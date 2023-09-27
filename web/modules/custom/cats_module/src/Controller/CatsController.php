@@ -4,7 +4,11 @@ namespace Drupal\cats_module\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 
+/**
+ *
+ */
 class CatsController extends ControllerBase {
+
   /**
    * Returns the Cats page content.
    *
@@ -13,7 +17,8 @@ class CatsController extends ControllerBase {
   public function content() {
     $output = [
       'cats_list' => [
-        '#markup' => $this->t('Hello! You can add here a photo of your cat.'), // Текст, який ви виводили раніше.
+    // Текст, який ви виводили раніше.
+        '#markup' => $this->t('Hello! You can add here a photo of your cat.'),
       ],
       'cats_form' => [
         '#type' => 'container',
@@ -22,4 +27,5 @@ class CatsController extends ControllerBase {
     ];
     return $output;
   }
+
 }

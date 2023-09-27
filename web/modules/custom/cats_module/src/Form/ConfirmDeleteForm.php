@@ -2,13 +2,12 @@
 
 namespace Drupal\cats_module\Form;
 
-use Drupal\Core\Ajax\RedirectCommand;
-use Drupal\Core\Form\FormBase;
-use Drupal\Core\Form\FormStateInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\cats_module\Entity\CatsEntity;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
+use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a confirmation form for deleting a cat entity.
@@ -27,7 +26,6 @@ class ConfirmDeleteForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-
 
   /**
    * {@inheritdoc}
@@ -63,6 +61,9 @@ class ConfirmDeleteForm extends FormBase {
     return $form;
   }
 
+  /**
+   *
+   */
   public function closeModal(array &$form, FormStateInterface $form_state) {
     // Create an AjaxResponse to close the modal.
     $response = new AjaxResponse();
@@ -83,6 +84,9 @@ class ConfirmDeleteForm extends FormBase {
     return new static($cats_entity);
   }
 
+  /**
+   *
+   */
   public function submitFormAjax(array &$form, FormStateInterface $form_state) {
     // Delete the entity here.
     $this->catsEntity->delete();
@@ -91,12 +95,9 @@ class ConfirmDeleteForm extends FormBase {
     $response = new AjaxResponse();
     $response->addCommand(new CloseModalDialogCommand());
 
-
     // Optionally, you can add additional Ajax commands or responses here.
-
     return $response;
   }
-
 
   /**
    * {@inheritdoc}

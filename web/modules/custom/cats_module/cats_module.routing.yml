@@ -40,4 +40,30 @@ entity.cats_module.delete_form:
     _permission: 'administer site configuration'
 
 
+cats_module.list_builder_form:
+  path: "/testik"
+  defaults:
+    _form: '\Drupal\cats_module\Form\CatsEntityListForm'
+    _title: "Your Custom Form"
+  requirements:
+    _permission: "access content"
+
+cats_module.list_entity_form:
+  path: "/testik2"
+  defaults:
+    _controller: '\Drupal\cats_module\Controller\CatsListFormController::buildListFormForUsers'
+    _title: "Your Custom Form"
+  requirements:
+    _permission: "access content"
+
+my_module.ajax_handler:
+  path: '/my-module/ajax/callback' # URL вашого обробника AJAX
+  defaults:
+    _controller: '\Drupal\cats_module\Controller\CatsTestController::delete'
+    _title: 'My Module AJAX Handler'
+  requirements:
+    _access: 'TRUE'
+    _permission: 'access content' # Змініть на необхідний вам доступ
+  options:
+    _ajax_request: TRUE # Позначте цей маршрут як AJAX-запит
 

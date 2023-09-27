@@ -15,6 +15,7 @@
 <table{{ attributes }}>
   <thead class="test">
   <tr>
+    <th>{{ header.select_all }}</th>
     <th>{{ 'Cat name'|t }}</th>
     <th>{{ 'Email'|t }}</th>
     <th>{{ 'Image'|t }}</th>
@@ -27,6 +28,7 @@
   <tbody>
   {% for row in rows %}
     <tr>
+      <td>{{ row.select }}</td>
       <td>{{ row.cat_name }}</td>
       <td>{{ row.email }}</td>
       <td>{{ row.cat_image }}</td>
@@ -41,3 +43,7 @@
   {% endfor %}
   </tbody>
 </table>
+
+
+
+
