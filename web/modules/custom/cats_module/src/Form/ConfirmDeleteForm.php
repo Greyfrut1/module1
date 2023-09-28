@@ -77,8 +77,6 @@ class ConfirmDeleteForm extends FormBase {
   public static function create(ContainerInterface $container) {
     $route_match = \Drupal::routeMatch();
     $cats_module_id = $route_match->getParameter('cats_module_id');
-
-    // Отримайте сутність за її ідентифікатором.
     $cats_entity = \Drupal::entityTypeManager()->getStorage('cats_module')->load($cats_module_id);
 
     return new static($cats_entity);
@@ -88,14 +86,9 @@ class ConfirmDeleteForm extends FormBase {
    *
    */
   public function submitFormAjax(array &$form, FormStateInterface $form_state) {
-    // Delete the entity here.
     $this->catsEntity->delete();
-
-    // Create an AjaxResponse to close the modal.
     $response = new AjaxResponse();
     $response->addCommand(new CloseModalDialogCommand());
-
-    // Optionally, you can add additional Ajax commands or responses here.
     return $response;
   }
 

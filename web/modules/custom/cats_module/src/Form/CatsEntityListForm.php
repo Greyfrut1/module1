@@ -6,6 +6,7 @@ use Drupal\cats_module\CatsEntityListBuilder;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -47,7 +48,6 @@ class CatsEntityListForm extends FormBase {
     $form['test'] = [];
     $rows = [];
     $row_id = 0;
-    // Додаємо кожну сутність як опцію разом з її назвою.
     foreach ($entities as $entity) {
       $entity = \Drupal::entityTypeManager()->getStorage('cats_module')->load($entity->id());
       $cat_name = $entity->get('cat_name')->value;
@@ -56,6 +56,7 @@ class CatsEntityListForm extends FormBase {
       $created_date = DrupalDateTime::createFromTimestamp($created_timestamp);
       $created_date_formatted = $created_date->format('d-m-Y H:i:s');
       $image_id = $entity->get('image')->target_id;
+      $url = Url::fromRoute('entity.cats_module.edit_form', ['cats_module_id' => $entity->id()]);
       $image_url = '';
       if ($image_id) {
         $file = \Drupal::entityTypeManager()->getStorage('file')->load($image_id);
@@ -78,6 +79,7 @@ class CatsEntityListForm extends FormBase {
         'email' => $email,
         'cat_image' => $cat_image,
         'created' => $created_date_formatted,
+        'edit' => $url,
       ];
       $row_id++;
     }
@@ -96,7 +98,6 @@ class CatsEntityListForm extends FormBase {
    *
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    // Отримуємо ідентифікатори обраних сутностей з форми.
     $entities = $this->catsEntityListBuilder->load();
     $test_values = [];
     foreach ($entities as $entity) {

@@ -1,0 +1,29 @@
+uuid: 50230f72-b714-4dcb-b55f-9aee3abde203
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.main
+  module:
+    - system
+  theme:
+    - cats_theme
+id: cats_theme_mainnavigation
+theme: cats_theme
+region: content
+weight: -4
+provider: null
+plugin: 'system_menu_block:main'
+settings:
+  id: 'system_menu_block:main'
+  label: 'Main navigation'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/cats_list\r\n/greyfrut/cats\r\n/admin/structure/cats_module/*\r\n/admin/cats_module/*\r\n/admin/structure/cats_list"

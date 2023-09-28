@@ -2,5 +2,9 @@ name: 'Cats theme'
 type: theme
 description: 'Custom Bootstrap-based theme for Drupal.'
 core_version_requirement: ^10
-base theme: bootstrap
+base theme: gin
 package: Custom
+
+libraries:
+  - cats_theme/global-styling
+  - cats_theme/cats_module_css

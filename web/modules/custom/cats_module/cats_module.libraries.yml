@@ -7,3 +7,4 @@ cats_module_js:
     - core/jquery
     - core/drupal.ajax
     - core/drupal.dialog
+

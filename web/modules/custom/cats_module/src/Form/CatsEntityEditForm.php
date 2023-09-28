@@ -120,7 +120,6 @@ class CatsEntityEditForm extends FormBase {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     $cat_name = $form_state->getValue('cat_name');
 
-    // Перевірка, чи довжина імені кота менше 3 символів або більше 32 символів.
     if (strlen($cat_name) < 3 || strlen($cat_name) > 32) {
       $form_state->setErrorByName('cat_name', $this->t('Cat name must be between 3 and 32 characters.'));
     }
@@ -132,7 +131,6 @@ class CatsEntityEditForm extends FormBase {
   public function validateEmailAjax(array &$form, FormStateInterface $form_state) {
     $email = $form_state->getValue('email');
 
-    // Перевірте, чи введена адреса електронної пошти є валідною.
     if (!\Drupal::service('email.validator')->isValid($email)) {
       $form['email']['#attributes']['class'][] = 'error';
       $form['email_validate_message']['#markup'] = '<div class="email-valudate-message">' . $this->t('Email is not valid.') . '</div>';
@@ -142,7 +140,6 @@ class CatsEntityEditForm extends FormBase {
       $form['email_validate_message']['#markup'] = '';
     }
 
-    // Поверніть всю оновлену форму, а не лише поле електронної пошти.
     return $form;
   }
 

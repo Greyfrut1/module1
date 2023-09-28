@@ -6,10 +6,8 @@ use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  *
@@ -55,16 +53,13 @@ class CatsEntityListBuilder extends EntityListBuilder {
 
     $user_roles = $current_user->getRoles();
 
-    $second_role = array_values($user_roles)[1];
+    $second_role = '';
+    if (!empty($user_roles) && count($user_roles) >= 2) {
+      $second_role = array_values($user_roles)[1];
+    }
 
-    $build['summary']['#markup'] = $this->t('Total custom entities: @total', ['@total' => $total]);
     $build['#attached']['library'][] = 'cats_module/cats_module_js';
     $build['table']['#attributes']['user'] = $second_role;
-    $build['select_all'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Select All'),
-      '#attributes' => ['class' => ['entity-select-all']],
-    ];
     return $build;
   }
 
@@ -112,14 +107,16 @@ class CatsEntityListBuilder extends EntityListBuilder {
 
     $current_user = \Drupal::currentUser();
     $user_roles = $current_user->getRoles();
-    $second_role = array_values($user_roles)[1];
+    $second_role = '';
+    if (!empty($user_roles) && count($user_roles) >= 2) {
+      $second_role = array_values($user_roles)[1];
+    }
 
     $row['select'] = [
       'data' => [
         '#type' => 'checkbox',
         '#attributes' => ['class' => ['entity-select']],
         '#default_value' => 0,
-    // Додайте ідентифікатор сутності до імені чекбокса.
         '#name' => 'entity_select[' . $entity->id() . ']',
       ],
       '#ajax' => [
@@ -158,29 +155,6 @@ class CatsEntityListBuilder extends EntityListBuilder {
     ];
 
     return $row + parent::buildRow($entity);
-  }
-
-  /**
-   *
-   */
-  public function deleteSelectedCallback(array &$form, FormStateInterface $form_state) {
-    // Отримайте значення вибраних чекбоксів з форми.
-    $selected_entities = $form_state->getValue('entity_select');
-
-    // Виконайте операцію видалення для кожної обраної сутності.
-    foreach ($selected_entities as $entity_id => $selected) {
-      if ($selected) {
-        // Ваш код для видалення сутності за її ідентифікатором $entity_id.
-        // Наприклад: $this->getStorage()->load($entity_id)->delete();
-      }
-    }
-
-    // Оновіть таблицю зі списком сутностей після видалення.
-    $form['entity_list'] = $this->render();
-    $response = new JsonResponse([
-      'entity_list' => render($form['entity_list']),
-    ]);
-    return $response;
   }
 
   /**

@@ -1,0 +1,22 @@
+uuid: b5d3a321-d116-4a91-829d-4c7b12aaa463
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - cats_theme
+_core:
+  default_config_hash: hBHXB7hC05XU7pDYzETt-GUcpFlogK1gkjyAsg0Ym58
+id: cats_theme_content
+theme: cats_theme
+region: content
+weight: -2
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  label_display: '0'
+  provider: system
+visibility: {  }

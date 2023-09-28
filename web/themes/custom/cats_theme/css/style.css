@@ -1,0 +1,20 @@
+#block-cats-theme-mainnavigation ul.menu {
+  display: flex;
+  margin-left: 0;
+  gap: 5px;
+}
+#block-cats-theme-mainnavigation ul.menu a {
+  text-decoration: none;
+  color: var(--gin-color-primary-active);
+  background: var(--gin-color-primary-light);
+  padding: 15px;
+  border-radius: 10px;
+}
+
+#block-cats-theme-mainnavigation ul.menu a:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+#block-cats-theme-mainnavigation ul.menu .menu-item {
+  list-style: none;
+}
