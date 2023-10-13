@@ -18,3 +18,6 @@
 #block-cats-theme-mainnavigation ul.menu .menu-item {
   list-style: none;
 }
+.ui-dialog .ui-dialog-buttonset {
+  justify-content: space-around;
+}

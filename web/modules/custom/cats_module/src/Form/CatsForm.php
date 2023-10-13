@@ -3,14 +3,38 @@
 namespace Drupal\cats_module\Form;
 
 use Drupal\cats_module\Entity\CatsEntity;
+use Drupal\Component\DependencyInjection\ContainerInterface;
+use Drupal\Component\Utility\EmailValidatorInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 
 /**
  *
  */
 class CatsForm extends FormBase {
+
+  protected $emailValidator;
+  protected $messenger;
+
+  /**
+   * Constructs a CatsEntityEditForm object.
+   */
+  public function __construct(EmailValidatorInterface $emailValidator, MessengerInterface $messenger) {
+    $this->emailValidator = $emailValidator;
+    $this->messenger = $messenger;
+  }
+
+  /**
+   *
+   */
+  public static function create(ContainerInterface|\Symfony\Component\DependencyInjection\ContainerInterface $container) {
+    return new static(
+      $container->get('email.validator'),
+      $container->get('messenger')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -82,7 +106,7 @@ class CatsForm extends FormBase {
       return $form;
     }
     $cat_name = $form_state->getValue('cat_name');
-    \Drupal::messenger()->addMessage($this->t('The cat @name has been added.', ['@name' => $cat_name]));
+    $this->messenger->addMessage($this->t('The cat @name has been added.', ['@name' => $cat_name]));
     $form_state->setValue('cat_name', '');
     $name = $form_state->getValue('cat_name');
 
@@ -122,7 +146,7 @@ class CatsForm extends FormBase {
    */
   public function validateEmailAjax(array &$form, FormStateInterface $form_state) {
     $email = $form_state->getValue('email');
-    if (!\Drupal::service('email.validator')->isValid($email)) {
+    if (!$this->emailValidator->isValid($email)) {
       $form['email']['#attributes']['class'][] = 'error';
       $form['email_validate_message']['#markup'] = '<div class="email-valudate-message">' . $this->t('Email is not valid.') . '</div>';
     }

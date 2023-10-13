@@ -5,6 +5,7 @@ namespace Drupal\cats_module\Form;
 use Drupal\cats_module\Entity\CatsEntity;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -15,17 +16,31 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ConfirmDeleteForm extends FormBase {
 
   protected $catsEntity;
+  protected $entityTypeManager;
 
   /**
    * {@inheritdoc}
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *     The entity type manager service.
    */
-  public function __construct(CatsEntity $cats_entity) {
+  public function __construct(CatsEntity $cats_entity, EntityTypeManagerInterface $entityTypeManager) {
     $this->catsEntity = $cats_entity;
+    $this->entityTypeManager = $entityTypeManager;
   }
 
   /**
    * {@inheritdoc}
    */
+  public static function create(ContainerInterface $container) {
+    $routeMatch = $container->get('current_route_match');
+    $route_parameters = $routeMatch->getParameters();
+    $cat_id = $route_parameters->get('cats_module_id');
+    $cats_entity = $container->get('entity_type.manager')->getStorage('cats_module')->load($cat_id);
+    $typeManager = $container->get('entity_type.manager');
+
+    return new static($cats_entity, $typeManager);
+  }
 
   /**
    * {@inheritdoc}
@@ -40,6 +55,10 @@ class ConfirmDeleteForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['message'] = [
       '#markup' => $this->t('Are you sure you want to delete the cat entity: %name?', ['%name' => $this->catsEntity->label()]),
+    ];
+
+    $form['actions'] = [
+      '#type' => 'actions',
     ];
 
     $form['actions']['yes'] = [
@@ -69,17 +88,6 @@ class ConfirmDeleteForm extends FormBase {
     $response = new AjaxResponse();
     $response->addCommand(new CloseModalDialogCommand());
     return $response;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    $route_match = \Drupal::routeMatch();
-    $cats_module_id = $route_match->getParameter('cats_module_id');
-    $cats_entity = \Drupal::entityTypeManager()->getStorage('cats_module')->load($cats_module_id);
-
-    return new static($cats_entity);
   }
 
   /**
