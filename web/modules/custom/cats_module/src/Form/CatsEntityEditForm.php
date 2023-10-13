@@ -3,9 +3,12 @@
 namespace Drupal\cats_module\Form;
 
 use Drupal\cats_module\Entity\CatsEntity;
+use Drupal\Component\Utility\EmailValidatorInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  *
@@ -15,23 +18,36 @@ class CatsEntityEditForm extends FormBase {
   protected $entity;
 
   /**
+   * The email validator service.
    *
+   * @var \Drupal\Core\Email\EmailValidatorInterface
    */
-  public function __construct(CatsEntity $entity) {
+  protected $emailValidator;
+
+  /**
+   * Constructs a CatsEntityEditForm object.
+   */
+  public function __construct(CatsEntity $entity, EmailValidatorInterface $emailValidator) {
     $this->entity = $entity;
+    $this->emailValidator = $emailValidator;
   }
 
   /**
    *
    */
   public static function create(ContainerInterface $container) {
-
-    $route_parameters = \Drupal::routeMatch()->getParameters();
+    $emailValidator = $container->get('email.validator');
+    $routeMatch = $container->get('current_route_match');
+    $route_parameters = $routeMatch->getParameters();
     $cat_id = $route_parameters->get('cats_module_id');
 
     $entity = \Drupal::entityTypeManager()->getStorage('cats_module')->load($cat_id);
 
-    return new static($entity);
+    if (!$entity) {
+      throw new NotFoundHttpException();
+    }
+
+    return new static($entity, $emailValidator);
   }
 
   /**
@@ -45,7 +61,6 @@ class CatsEntityEditForm extends FormBase {
    *
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-
     $cats_entity = $this->entity;
     $form['#prefix'] = '<div id="cats-form-wrapper">';
     $form['#suffix'] = '</div>';
@@ -131,7 +146,7 @@ class CatsEntityEditForm extends FormBase {
   public function validateEmailAjax(array &$form, FormStateInterface $form_state) {
     $email = $form_state->getValue('email');
 
-    if (!\Drupal::service('email.validator')->isValid($email)) {
+    if (!$this->emailValidator->isValid($email)) {
       $form['email']['#attributes']['class'][] = 'error';
       $form['email_validate_message']['#markup'] = '<div class="email-valudate-message">' . $this->t('Email is not valid.') . '</div>';
     }

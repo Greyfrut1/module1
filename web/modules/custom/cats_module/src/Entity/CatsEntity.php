@@ -54,9 +54,7 @@ class CatsEntity extends ContentEntityBase implements ContentEntityInterface {
       ->setLabel(t("Your cat’s name:"))
       ->setDescription(t("Min length: 2 characters. Max length: 32 characters"))
       ->setSettings(["max_length" => 255, "text_processing" => 0])
-      ->setDefaultValue("")
-      ->setDisplayOptions("view", ["label" => "above", "type" => "string", "wegith" => -3])
-      ->setDisplayOptions("form", ["type" => "string_textfield", "wegith" => -3]);
+      ->setDefaultValue("");
 
     $fields["email"] = BaseFieldDefinition::create("email")
       ->setLabel(t("Your email:"))

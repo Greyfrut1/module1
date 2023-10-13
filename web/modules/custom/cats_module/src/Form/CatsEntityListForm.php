@@ -4,6 +4,7 @@ namespace Drupal\cats_module\Form;
 
 use Drupal\cats_module\CatsEntityListBuilder;
 use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
@@ -15,12 +16,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class CatsEntityListForm extends FormBase {
 
   protected $catsEntityListBuilder;
+  protected $entityTypeManager;
 
   /**
+   * Constructs a new CatsEntityListBuilder object.
    *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *    The entity type manager service.
    */
-  public function __construct(CatsEntityListBuilder $catsEntityListBuilder) {
+  public function __construct(CatsEntityListBuilder $catsEntityListBuilder, EntityTypeManagerInterface $entityTypeManager) {
     $this->catsEntityListBuilder = $catsEntityListBuilder;
+    $this->entityTypeManager = $entityTypeManager;
   }
 
   /**
@@ -28,7 +34,8 @@ class CatsEntityListForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity_type.manager')->getListBuilder('cats_module')
+      $container->get('entity_type.manager')->getListBuilder('cats_module'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -49,7 +56,7 @@ class CatsEntityListForm extends FormBase {
     $rows = [];
     $row_id = 0;
     foreach ($entities as $entity) {
-      $entity = \Drupal::entityTypeManager()->getStorage('cats_module')->load($entity->id());
+      $entity = $this->entityTypeManager->getStorage('cats_module')->load($entity->id());
       $cat_name = $entity->get('cat_name')->value;
       $email = $entity->get('email')->value;
       $created_timestamp = $entity->get('created')->value;
@@ -59,7 +66,7 @@ class CatsEntityListForm extends FormBase {
       $url = Url::fromRoute('entity.cats_module.edit_form', ['cats_module_id' => $entity->id()]);
       $image_url = '';
       if ($image_id) {
-        $file = \Drupal::entityTypeManager()->getStorage('file')->load($image_id);
+        $file = $this->entityTypeManager->getStorage('file')->load($image_id);
         if ($file) {
           $image_url = $file->createFileUrl();
         }
@@ -105,7 +112,7 @@ class CatsEntityListForm extends FormBase {
     };
     foreach ($test_values as $value) {
       if ($value) {
-        $entity = \Drupal::entityTypeManager()->getStorage('cats_module')->load($value);
+        $entity = $this->entityTypeManager->getStorage('cats_module')->load($value);
         $entity->delete();
       }
     }

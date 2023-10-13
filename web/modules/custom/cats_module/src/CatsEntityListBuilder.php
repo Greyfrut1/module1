@@ -6,6 +6,9 @@ use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -15,12 +18,42 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class CatsEntityListBuilder extends EntityListBuilder {
 
   protected $formBuilder;
+  protected $currentUser;
+  protected $entityTypeManager;
+  protected $requestStack;
 
   /**
+   * Constructs a new CatsEntityListBuilder object.
    *
+   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
+   *   The current user.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager service.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+   *   The request stack service.
+   */
+  public function __construct(
+    EntityTypeInterface $entity_type,
+    AccountProxyInterface $current_user,
+    EntityTypeManagerInterface $entityTypeManager,
+    RequestStack $requestStack
+  ) {
+    parent::__construct($entity_type, $entityTypeManager->getStorage('cats_module'));
+    $this->currentUser = $current_user;
+    $this->entityTypeManager = $entityTypeManager;
+    $this->requestStack = $requestStack;
+  }
+
+  /**
+   * {@inheritdoc}
    */
   public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
-    return parent::createInstance($container, $entity_type);
+    return new static(
+      $entity_type,
+      $container->get('current_user'),
+      $container->get('entity_type.manager'),
+      $container->get('request_stack')
+    );
   }
 
   /**
@@ -29,7 +62,6 @@ class CatsEntityListBuilder extends EntityListBuilder {
   public function render() {
     $entities = $this->load();
 
-    // Створюємо масив для рядків таблиці.
     $rows = [];
     foreach ($entities as $entity) {
       if ($entity) {
@@ -49,7 +81,7 @@ class CatsEntityListBuilder extends EntityListBuilder {
       ->count()
       ->execute();
 
-    $current_user = \Drupal::currentUser();
+    $current_user = $this->currentUser;
 
     $user_roles = $current_user->getRoles();
 
@@ -58,7 +90,6 @@ class CatsEntityListBuilder extends EntityListBuilder {
       $second_role = array_values($user_roles)[1];
     }
 
-    $build['#attached']['library'][] = 'cats_module/cats_module_js';
     $build['table']['#attributes']['user'] = $second_role;
     return $build;
   }
@@ -90,7 +121,7 @@ class CatsEntityListBuilder extends EntityListBuilder {
 
     $image_url = '';
     if ($image_id) {
-      $file = \Drupal::entityTypeManager()->getStorage('file')->load($image_id);
+      $file = $this->entityTypeManager->getStorage('file')->load($image_id);
       if ($file) {
         $image_url = $file->createFileUrl();
       }
@@ -105,7 +136,7 @@ class CatsEntityListBuilder extends EntityListBuilder {
     $created_date = DrupalDateTime::createFromTimestamp($created_timestamp);
     $created_date_formatted = $created_date->format('d-m-Y H:i:s');
 
-    $current_user = \Drupal::currentUser();
+    $current_user = $this->currentUser;
     $user_roles = $current_user->getRoles();
     $second_role = '';
     if (!empty($user_roles) && count($user_roles) >= 2) {
@@ -161,7 +192,8 @@ class CatsEntityListBuilder extends EntityListBuilder {
    *
    */
   public function load() {
-    $query = $this->getStorage()->getQuery();
+    $entity_type_id = 'cats_module';
+    $query = $this->entityTypeManager->getStorage($entity_type_id)->getQuery();
     $query->sort('created', 'DESC');
     $query->accessCheck(FALSE);
     $entity_ids = $query->execute();

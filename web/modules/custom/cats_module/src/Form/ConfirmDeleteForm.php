@@ -49,7 +49,7 @@ class ConfirmDeleteForm extends FormBase {
     ];
 
     $form['actions']['no'] = [
-      '#type' => 'submit',
+      '#type' => 'button',
       '#value' => $this->t('No'),
       '#ajax' => [
         'callback' => [$this, 'closeModal'],

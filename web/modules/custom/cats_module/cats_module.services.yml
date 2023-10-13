@@ -1,5 +1,6 @@
 services:
-  cats_module.list_builder:
-    class: Drupal\cats_module\CatsEntityListBuilder
+  cats_module.entity_list_builder:
+    class: Drupal\cats_module\Entity\CatsEntityListBuilder
+    arguments: ['@entity_type.manager']
     tags:
-      - { name: entity.list_builder }
+      - { name: entity_list_builder, entity_type: cats_module }
