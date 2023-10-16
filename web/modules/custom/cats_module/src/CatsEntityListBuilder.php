@@ -7,13 +7,13 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- *
+ * Provides a list builder for the Cats Entity.
  */
 class CatsEntityListBuilder extends EntityListBuilder {
 
@@ -25,6 +25,8 @@ class CatsEntityListBuilder extends EntityListBuilder {
   /**
    * Constructs a new CatsEntityListBuilder object.
    *
+   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
+   *   The entity type.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   The current user.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -57,7 +59,7 @@ class CatsEntityListBuilder extends EntityListBuilder {
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function render() {
     $entities = $this->load();
@@ -95,7 +97,7 @@ class CatsEntityListBuilder extends EntityListBuilder {
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function buildHeader() {
     $header['select_all'] = [
@@ -113,7 +115,7 @@ class CatsEntityListBuilder extends EntityListBuilder {
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
     $image_id = $entity->get('image')->target_id;
@@ -189,7 +191,7 @@ class CatsEntityListBuilder extends EntityListBuilder {
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function load() {
     $entity_type_id = 'cats_module';

@@ -11,7 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 
 /**
- *
+ * Form for adding a new cat entity.
  */
 class CatsForm extends FormBase {
 
@@ -27,7 +27,7 @@ class CatsForm extends FormBase {
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface|\Symfony\Component\DependencyInjection\ContainerInterface $container) {
     return new static(
@@ -114,7 +114,7 @@ class CatsForm extends FormBase {
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $cat_name = $form_state->getValue('cat_name');
@@ -142,7 +142,7 @@ class CatsForm extends FormBase {
   }
 
   /**
-   *
+   * Validates the email field using Ajax.
    */
   public function validateEmailAjax(array &$form, FormStateInterface $form_state) {
     $email = $form_state->getValue('email');

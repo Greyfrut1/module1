@@ -11,7 +11,7 @@ use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- *
+ * Form for managing the list of Cats entities.
  */
 class CatsEntityListForm extends FormBase {
 
@@ -22,7 +22,7 @@ class CatsEntityListForm extends FormBase {
    * Constructs a new CatsEntityListBuilder object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *    The entity type manager service.
+   *   The entity type manager service.
    */
   public function __construct(CatsEntityListBuilder $catsEntityListBuilder, EntityTypeManagerInterface $entityTypeManager) {
     $this->catsEntityListBuilder = $catsEntityListBuilder;
@@ -30,7 +30,7 @@ class CatsEntityListForm extends FormBase {
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
@@ -40,19 +40,17 @@ class CatsEntityListForm extends FormBase {
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function getFormId() {
     return 'cats_module_list_admin_form';
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $entities = $this->catsEntityListBuilder->load();
-
-    $form['test'] = [];
     $rows = [];
     $row_id = 0;
     foreach ($entities as $entity) {
@@ -102,7 +100,7 @@ class CatsEntityListForm extends FormBase {
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $entities = $this->catsEntityListBuilder->load();
@@ -120,7 +118,7 @@ class CatsEntityListForm extends FormBase {
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function elementValidateFunction($element, FormStateInterface $form_state) {
     return $element;

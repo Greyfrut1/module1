@@ -36,11 +36,16 @@ use Drupal\Core\Field\BaseFieldDefinition;
 class CatsEntity extends ContentEntityBase implements ContentEntityInterface {
 
   /**
+   * Defines the base fields for the cats_module entity.
    *
+   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
+   *   The entity type to define fields for.
+   *
+   * @return array
+   *   An array of base field definitions.
    */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
 
-    // Standard field, used as unique if primary index.
     $fields['id'] = BaseFieldDefinition::create('integer')
       ->setLabel(t('ID'))
       ->setDescription(t('Id of cat entity'))

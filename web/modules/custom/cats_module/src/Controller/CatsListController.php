@@ -7,7 +7,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- *
+ * Controller for displaying a list of entities of type cats_module.
  */
 class CatsListController extends ControllerBase {
 
@@ -38,7 +38,7 @@ class CatsListController extends ControllerBase {
   }
 
   /**
-   *
+   * Displays a list of cats_module entities for users.
    */
   public function buildListForUsers() {
     $list_builder = $this->entityTypeManager->getListBuilder('cats_module');

@@ -11,7 +11,6 @@ function cats_module_theme($existing, $type, $theme, $path) {
         'header' => [],
         'attributes' => [],
       ],
-      'template' => 'CatsEntityListBuilder',
       '#attached' => [
         'library' => ['core/drupal.dialog.ajax'],
       ],
@@ -21,6 +20,4 @@ function cats_module_theme($existing, $type, $theme, $path) {
     ],
   ];
 }
-function cats_module_preprocess_cats_entity_list_builder(&$variables) {
-  $variables['#attached']['library'][] = 'cats_module/cats_module_js';
-}
+

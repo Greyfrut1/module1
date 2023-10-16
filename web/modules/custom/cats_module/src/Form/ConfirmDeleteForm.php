@@ -19,10 +19,12 @@ class ConfirmDeleteForm extends FormBase {
   protected $entityTypeManager;
 
   /**
-   * {@inheritdoc}
+   * Constructs a ConfirmDeleteForm object.
    *
+   * @param \Drupal\cats_module\Entity\CatsEntity $cats_entity
+   *   The cat entity to be deleted.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *     The entity type manager service.
+   *   The entity type manager service.
    */
   public function __construct(CatsEntity $cats_entity, EntityTypeManagerInterface $entityTypeManager) {
     $this->catsEntity = $cats_entity;
@@ -75,13 +77,12 @@ class ConfirmDeleteForm extends FormBase {
       ],
       '#limit_validation_errors' => [],
     ];
-    $form['#attached']['library'][] = 'cats_module/cats_module_js';
 
     return $form;
   }
 
   /**
-   *
+   * Closes the modal dialog via Ajax.
    */
   public function closeModal(array &$form, FormStateInterface $form_state) {
     // Create an AjaxResponse to close the modal.
@@ -91,7 +92,7 @@ class ConfirmDeleteForm extends FormBase {
   }
 
   /**
-   *
+   * Handles the Ajax submission of the form and deletes the cat entity.
    */
   public function submitFormAjax(array &$form, FormStateInterface $form_state) {
     $this->catsEntity->delete();

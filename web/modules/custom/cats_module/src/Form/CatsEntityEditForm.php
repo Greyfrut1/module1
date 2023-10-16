@@ -6,12 +6,11 @@ use Drupal\cats_module\Entity\CatsEntity;
 use Drupal\Component\Utility\EmailValidatorInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- *
+ * Form for editing the CatsEntity.
  */
 class CatsEntityEditForm extends FormBase {
 
@@ -20,7 +19,7 @@ class CatsEntityEditForm extends FormBase {
   /**
    * The email validator service.
    *
-   * @var \Drupal\Core\Email\EmailValidatorInterface
+   * @var \Drupal\Component\Utility\EmailValidatorInterface
    */
   protected $emailValidator;
 
@@ -33,7 +32,7 @@ class CatsEntityEditForm extends FormBase {
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     $emailValidator = $container->get('email.validator');
@@ -51,14 +50,14 @@ class CatsEntityEditForm extends FormBase {
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function getFormId() {
     return 'cats_module_id';
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $cats_entity = $this->entity;
@@ -114,10 +113,6 @@ class CatsEntityEditForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-
-  /**
-   * {@inheritdoc}
-   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $entity = $this->entity;
     $entity->set('cat_name', $form_state->getValue('cat_name'));
@@ -130,7 +125,7 @@ class CatsEntityEditForm extends FormBase {
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     $cat_name = $form_state->getValue('cat_name');
@@ -141,7 +136,7 @@ class CatsEntityEditForm extends FormBase {
   }
 
   /**
-   *
+   * Validates the email field using Ajax.
    */
   public function validateEmailAjax(array &$form, FormStateInterface $form_state) {
     $email = $form_state->getValue('email');

@@ -63,13 +63,11 @@ class CatsEntityDeleteController extends ControllerBase {
    */
   public function delete($cats_module_id) {
     $cats_entity = $this->entityTypeManager->getStorage('cats_module')->load($cats_module_id);
-
     if (!$cats_entity) {
       throw new NotFoundHttpException();
     }
     $response = new AjaxResponse();
     $form = $this->formBuilder->getForm('Drupal\cats_module\Form\ConfirmDeleteForm', $cats_entity);
-    $form['#attached']['library'][] = 'cats_module/cats_module_js';
 
     $response->addCommand(new OpenModalDialogCommand(
       $this->t('Delete Cat Entity'),
